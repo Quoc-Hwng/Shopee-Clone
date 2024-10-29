@@ -1,11 +1,22 @@
 import { Link } from 'react-router-dom'
+import Popover from '../Popover'
 
 export default function Header() {
   return (
     <div className='pb-5 pt-2  bg-[linear-gradient(-180deg,#f53d2d,#f63)]'>
       <div className='container'>
         <div className='flex justify-end'>
-          <div className='flex items-center py-1 hover:text-gray-300 cursor-pointer'>
+          <Popover
+            className='flex items-center py-1 hover:text-gray-300 cursor-pointer'
+            renderPopover={
+              <div className='bg-white relative shadow-md rounded-sm border border-gray-2'>
+                <div className='flex flex-col py-2 pr-28 pl-3'>
+                  <button className='py-2 px-3 hover:text-orange'>Tiếng Việt</button>
+                  <button className='py-2 px-3 hover:text-orange'>Tiếng Anh</button>
+                </div>
+              </div>
+            }
+          >
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -31,8 +42,23 @@ export default function Header() {
             >
               <path strokeLinecap='round' strokeLinejoin='round' d='m19.5 8.25-7.5 7.5-7.5-7.5' />
             </svg>
-          </div>
-          <div className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'>
+          </Popover>
+          <Popover
+            className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'
+            renderPopover={
+              <div className='bg-white relative shadow-md rounded-sm border border-gray-2'>
+                <Link to='/' className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full'>
+                  Tài khoản của tôi
+                </Link>
+                <Link to='/' className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full'>
+                  Đơn mua
+                </Link>
+                <button className='py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'>
+                  Đăng xuất
+                </button>
+              </div>
+            }
+          >
             <div className='w-6 h-6 mr-2 flex-shrink-0'>
               <img
                 src='https://scontent.fsgn2-5.fna.fbcdn.net/v/t39.30808-1/448316774_3849390388626953_1805964275726886412_n.jpg?stp=cp0_dst-jpg_s40x40&_nc_cat=104&ccb=1-7&_nc_sid=0ecb9b&_nc_eui2=AeEgxLCWo07ZSRgexLzBvwYajicYnAq47UeOJxicCrjtR-gtMuMcDQc_8V7ZP85oWq7fxLJ0woXGkWqyGDOnnptZ&_nc_ohc=eArQE4uy5AAQ7kNvgFCZZIq&_nc_zt=24&_nc_ht=scontent.fsgn2-5.fna&_nc_gid=A4dbB7jFmiHWNuFUyqbZYvx&oh=00_AYC8Dnau6_ywP7nTOB-qxFVts-mhaiMRy6l_VvumYqvyzA&oe=672664DD'
@@ -41,7 +67,7 @@ export default function Header() {
               />
             </div>
             <div className=''>phamquochung</div>
-          </div>
+          </Popover>
         </div>
         <div className='grid grid-cols-12 gap-4 mt-4 items-end'>
           <Link to='/' className='col-span-2'>
@@ -95,7 +121,7 @@ export default function Header() {
                 viewBox='0 0 24 24'
                 strokeWidth={1.5}
                 stroke='currentColor'
-                className='size-8 border-white'
+                className='size-8'
               >
                 <path
                   strokeLinecap='round'
