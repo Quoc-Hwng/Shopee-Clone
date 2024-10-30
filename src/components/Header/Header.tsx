@@ -9,7 +9,7 @@ export default function Header() {
           <Popover
             className='flex items-center py-1 hover:text-gray-300 cursor-pointer'
             renderPopover={
-              <div className='bg-white relative shadow-md rounded-sm border border-gray-2'>
+              <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
                 <div className='flex flex-col py-2 pr-28 pl-3'>
                   <button className='py-2 px-3 hover:text-orange'>Tiếng Việt</button>
                   <button className='py-2 px-3 hover:text-orange'>Tiếng Anh</button>
@@ -46,7 +46,7 @@ export default function Header() {
           <Popover
             className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'
             renderPopover={
-              <div className='bg-white relative shadow-md rounded-sm border border-gray-2'>
+              <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
                 <Link to='/' className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full'>
                   Tài khoản của tôi
                 </Link>
@@ -113,7 +113,43 @@ export default function Header() {
               </button>
             </div>
           </form>
-          <div className='col-span-1  justify-center flex'>
+
+          <Popover
+            className='col-span-1 justify-self-end'
+            renderPopover={
+              <div className='bg-white relative shadow-md rounded-sm border border-gray-200 max-w-[400px] text-sm'>
+                <div className='p-2'>
+                  <div className='text-gray-400 capitalize'>Sản Phẩm Mới Thêm</div>
+                  <div className='mt-5'>
+                    <div className='mt-4 flex'>
+                      <div className='flex-shrink-0'>
+                        <img
+                          src='https://i1.wp.com/laptopmedia.com/wp-content/uploads/2017/06/refurbished-macbook-pro-1.jpg?fit=2160%2C1601'
+                          alt='anh'
+                          className='w-11 h-11 object-cover'
+                        />
+                      </div>
+                      <div className='flex-grow ml-2 overflow-hidden'>
+                        <div className='truncate'>
+                          [LIFEMCMBP2 -12% đơn 25M] Apple Macbook Pro M3 19 inch 2024 32GB - 1TB| Chính hãng Apple Việt
+                          Nam
+                        </div>
+                      </div>
+                      <div className='ml-2 flex-shrink-0'>
+                        <div className='text-orange'>đ56.000.000</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className='flex mt-6 items-center justify-between'>
+                    <div className='capitalize text-xs'>Thêm Hàng Vào Giỏ</div>
+                    <button className='capitalize bg-orange hover:bg-opacity-80 px-4 py-2 rounded-sm text-white'>
+                      Xem Giỏ Hàng
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
+          >
             <Link to='/'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
@@ -130,7 +166,7 @@ export default function Header() {
                 />
               </svg>
             </Link>
-          </div>
+          </Popover>
         </div>
       </div>
     </div>
