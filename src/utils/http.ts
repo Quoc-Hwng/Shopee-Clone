@@ -32,7 +32,6 @@ class Http {
           if (authResponse?.data?.access_token) {
             this.accessToken = authResponse.data.access_token
             setAccessTokenToLS(this.accessToken)
-            console.log(data)
             if (data.data?.user) {
               // Check if user is defined
               setProfileToLS(data.data.user)
