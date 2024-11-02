@@ -1,13 +1,14 @@
 import { InputHTMLAttributes } from 'react'
-import { UseFormRegister } from 'react-hook-form'
+import { UseFormRegister, FieldValues, FieldPath } from 'react-hook-form'
 
-interface Props extends InputHTMLAttributes<HTMLInputElement> {
+interface Props<T extends FieldValues> extends InputHTMLAttributes<HTMLInputElement> {
   errorMessage?: string
   classNameInput?: string
   classNameError?: string
-  register?: UseFormRegister<any>
+  register?: UseFormRegister<T>
+  name: FieldPath<T>
 }
-export default function Input(props: Readonly<Props>) {
+export default function Input<T extends FieldValues>(props: Readonly<Props<T>>) {
   const {
     type,
     errorMessage,
