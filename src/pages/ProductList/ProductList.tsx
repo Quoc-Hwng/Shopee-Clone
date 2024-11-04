@@ -35,7 +35,6 @@ export default function ProductList() {
     },
     placeholderData: keepPreviousData
   })
-  console.log(data)
   return (
     <div className='bg-gray-200 py-6'>
       <div className='container'>
@@ -45,7 +44,7 @@ export default function ProductList() {
               <AsideFilter />
             </div>
             <div className='col-span-9'>
-              <SortProductList />
+              <SortProductList queryConfig={queryConfig} pageSize={data.data.data?.pagination.page_size ?? 1} />
               <div className='mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3'>
                 {data?.data?.data?.products?.map((product) => (
                   <div className='col-span-1' key={product._id}>
