@@ -7,7 +7,7 @@ const URL = 'purchases'
 export const purchaseApi = {
   addToCart: (body: { product_id: string; buy_count: number }) =>
     http.post<SuccessResponse<Purchase>>(`${URL}/add-to-cart`, body),
-  getPurchaseList: (params: { status: PurchaseListStatus }) => http.get<SuccessResponse<Purchase[]>>(URL, { params })
+  getPurchase: (params: { status: PurchaseListStatus }) => http.get<SuccessResponse<Purchase[]>>(URL, { params })
 }
 
 export default purchaseApi

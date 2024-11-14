@@ -1,4 +1,4 @@
-export const PURCHASE_STATUS = {
+export const PURCHASES_STATUS = {
   inCart: -1,
   all: 0,
   waitForConfirmation: 1,

@@ -1,6 +1,6 @@
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import Popover from '../Popover'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import authApi from '../../apis/auth.api'
 import { useContext } from 'react'
 import { AppContext } from '../../contexts/app.context'
@@ -10,11 +10,15 @@ import { useForm } from 'react-hook-form'
 import { schema, Schema } from '../../utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { omit } from 'lodash'
+import { PURCHASES_STATUS } from '../../constants/purchase'
+import purchaseApi from '../../apis/purchase.api'
+import noProduct from '../../assets/images/noProduct.png'
+import { formatCurrency } from '../../utils/utils'
 
 type FormData = Pick<Schema, 'name'>
 
 const nameSchema = schema.pick(['name'])
-
+const MAX_PURCHASES = 5
 export default function Header() {
   const queryConfig = useQueryConfig()
   const { register, handleSubmit } = useForm<FormData>({
@@ -32,6 +36,17 @@ export default function Header() {
       setProfile(null)
     }
   })
+
+  //Khi chuyển trang Header chỉ bị re-render khi có sự thay đổi trong queryKey
+  //Chứ không bị unmount - mount lại
+  //(Trừ trường hợp logout rồi nhảy sang login rồi về lại home)
+  //Nên các query này sẽ không bị inactive => Không bị gọi lại => Không cần set state lại
+  const { data: purchaseInCartData } = useQuery({
+    queryKey: ['purchases', { status: PURCHASES_STATUS.inCart }],
+    queryFn: () => purchaseApi.getPurchase({ status: PURCHASES_STATUS.inCart })
+  })
+  const purchaseInCart = purchaseInCartData?.data.data
+
   const handleLogout = () => {
     logoutMutation.mutate()
   }
@@ -180,39 +195,48 @@ export default function Header() {
             className='col-span-1 justify-self-end'
             renderPopover={
               <div className='bg-white relative shadow-md rounded-sm border border-gray-200 max-w-[400px] text-sm'>
-                <div className='p-2'>
-                  <div className='text-gray-400 capitalize'>Sản Phẩm Mới Thêm</div>
-                  <div className='mt-5'>
-                    <div className='mt-4 flex'>
-                      <div className='flex-shrink-0'>
-                        <img
-                          src='https://i1.wp.com/laptopmedia.com/wp-content/uploads/2017/06/refurbished-macbook-pro-1.jpg?fit=2160%2C1601'
-                          alt='anh'
-                          className='w-11 h-11 object-cover'
-                        />
-                      </div>
-                      <div className='flex-grow ml-2 overflow-hidden'>
-                        <div className='truncate'>
-                          [LIFEMCMBP2 -12% đơn 25M] Apple Macbook Pro M3 19 inch 2024 32GB - 1TB| Chính hãng Apple Việt
-                          Nam
+                {purchaseInCart ? (
+                  <div className='p-2'>
+                    <div className='text-gray-400 capitalize'>Sản Phẩm Mới Thêm</div>
+                    <div className='mt-5'>
+                      {purchaseInCart.slice(0, MAX_PURCHASES).map((purchase) => (
+                        <div className='mt-2 py-2 flex hover:bg-gray-100' key={purchase._id}>
+                          <div className='flex-shrink-0'>
+                            <img
+                              src={purchase.product.image}
+                              alt={purchase.product.name}
+                              className='w-11 h-11 object-cover'
+                            />
+                          </div>
+                          <div className='flex-grow ml-2 overflow-hidden'>
+                            <div className='truncate'>{purchase.product.name}</div>
+                          </div>
+                          <div className='ml-2 flex-shrink-0'>
+                            <div className='text-orange'>₫{formatCurrency(purchase.product.price)}</div>
+                          </div>
                         </div>
+                      ))}
+                    </div>
+                    <div className='flex mt-6 items-center justify-between'>
+                      <div className='capitalize text-xs'>
+                        {purchaseInCart.length > MAX_PURCHASES ? purchaseInCart.length - MAX_PURCHASES : ''} Thêm Hàng
+                        Vào Giỏ
                       </div>
-                      <div className='ml-2 flex-shrink-0'>
-                        <div className='text-orange'>đ56.000.000</div>
-                      </div>
+                      <button className='capitalize bg-orange hover:bg-opacity-80 px-4 py-2 rounded-sm text-white'>
+                        Xem Giỏ Hàng
+                      </button>
                     </div>
                   </div>
-                  <div className='flex mt-6 items-center justify-between'>
-                    <div className='capitalize text-xs'>Thêm Hàng Vào Giỏ</div>
-                    <button className='capitalize bg-orange hover:bg-opacity-80 px-4 py-2 rounded-sm text-white'>
-                      Xem Giỏ Hàng
-                    </button>
+                ) : (
+                  <div className='py-14 text-center w-96'>
+                    <img src={noProduct} alt='no-product' className='size-24 inline-block' />
+                    <h3 className='capitalize'>Chưa có sản phẩm</h3>
                   </div>
-                </div>
+                )}
               </div>
             }
           >
-            <Link to='/'>
+            <Link to='/' className='relative'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 fill='none'
@@ -227,6 +251,9 @@ export default function Header() {
                   d='M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z'
                 />
               </svg>
+              <span className='absolute top-[-5px] left-[18px] rounded-full px-[9px] py-[1px] bg-white text-xs text-orange'>
+                {purchaseInCart?.length}
+              </span>
             </Link>
           </Popover>
         </div>
