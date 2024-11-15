@@ -1,6 +1,6 @@
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import Popover from '../Popover'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import authApi from '../../apis/auth.api'
 import { useContext } from 'react'
 import { AppContext } from '../../contexts/app.context'
@@ -19,8 +19,10 @@ type FormData = Pick<Schema, 'name'>
 
 const nameSchema = schema.pick(['name'])
 const MAX_PURCHASES = 5
+
 export default function Header() {
   const queryConfig = useQueryConfig()
+  const queryClient = useQueryClient()
   const { register, handleSubmit } = useForm<FormData>({
     defaultValues: {
       name: ''
@@ -34,6 +36,7 @@ export default function Header() {
     onSuccess: () => {
       setIsAuthenticated(false)
       setProfile(null)
+      queryClient.removeQueries({ queryKey: ['purchases', { status: PURCHASES_STATUS.inCart }] })
     }
   })
 
@@ -43,7 +46,8 @@ export default function Header() {
   //Nên các query này sẽ không bị inactive => Không bị gọi lại => Không cần set state lại
   const { data: purchaseInCartData } = useQuery({
     queryKey: ['purchases', { status: PURCHASES_STATUS.inCart }],
-    queryFn: () => purchaseApi.getPurchase({ status: PURCHASES_STATUS.inCart })
+    queryFn: () => purchaseApi.getPurchase({ status: PURCHASES_STATUS.inCart }),
+    enabled: isAuthenticated
   })
   const purchaseInCart = purchaseInCartData?.data.data
 
@@ -222,9 +226,12 @@ export default function Header() {
                         {purchaseInCart.length > MAX_PURCHASES ? purchaseInCart.length - MAX_PURCHASES : ''} Thêm Hàng
                         Vào Giỏ
                       </div>
-                      <button className='capitalize bg-orange hover:bg-opacity-80 px-4 py-2 rounded-sm text-white'>
+                      <Link
+                        to={path.cart}
+                        className='capitalize bg-orange hover:bg-opacity-80 px-4 py-2 rounded-sm text-white'
+                      >
                         Xem Giỏ Hàng
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 ) : (
@@ -251,9 +258,11 @@ export default function Header() {
                   d='M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z'
                 />
               </svg>
-              <span className='absolute top-[-5px] left-[18px] rounded-full px-[9px] py-[1px] bg-white text-xs text-orange'>
-                {purchaseInCart?.length}
-              </span>
+              {purchaseInCart && (
+                <span className='absolute top-[-5px] left-[18px] rounded-full px-[9px] py-[1px] bg-white text-xs text-orange'>
+                  {purchaseInCart?.length}
+                </span>
+              )}
             </Link>
           </Popover>
         </div>
