@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import productApi from '../../apis/product.api'
 import ProductRating from '../../components/ProductRating'
 import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } from '../../utils/utils'
@@ -11,6 +11,7 @@ import QuantityController from '../../components/QuantityController'
 import purchaseApi from '../../apis/purchase.api'
 import { PURCHASES_STATUS } from '../../constants/purchase'
 import { toast } from 'react-toastify'
+import path from '../../constants/path'
 
 export default function ProductDetail() {
   const [buyCount, setBuyCount] = useState(1)
@@ -41,6 +42,7 @@ export default function ProductDetail() {
   const addToCartMutation = useMutation({
     mutationFn: (body: { product_id: string; buy_count: number }) => purchaseApi.addToCart(body)
   })
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (product && product.images.length > 0) {
@@ -102,6 +104,16 @@ export default function ProductDetail() {
     )
   }
 
+  const buyNow = async () => {
+    const res = await addToCartMutation.mutateAsync({ buy_count: buyCount, product_id: product?._id as string })
+    const purchase = res.data.data
+    navigate(path.cart, {
+      state: {
+        purchaseId: purchase?._id
+      }
+    })
+  }
+
   if (!product) return null
   return (
     <div className='bg-gray-200 py-6'>
@@ -113,6 +125,7 @@ export default function ProductDetail() {
                 className='relative w-full pt-[100%] shadow overflow-hidden cursor-zoom-in'
                 onMouseMove={handleZoom}
                 onMouseLeave={handleRemoveZoom}
+                aria-label='Zoom image'
               >
                 <img
                   src={activeImage}
@@ -226,7 +239,10 @@ export default function ProductDetail() {
                   </svg>
                   Thêm vào giỏ hàng
                 </button>
-                <button className='ml-4 flex h-12 min-w-[5rem] items-center justify-center rounded-sm bg-orange px-5 capitalize text-white shadow-sm outline-none hover:bg-orange/90'>
+                <button
+                  className='ml-4 flex h-12 min-w-[5rem] items-center justify-center rounded-sm bg-orange px-5 capitalize text-white shadow-sm outline-none hover:bg-orange/90'
+                  onClick={buyNow}
+                >
                   Mua ngay
                 </button>
               </div>
