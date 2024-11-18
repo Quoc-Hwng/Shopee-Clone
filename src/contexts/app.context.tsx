@@ -10,6 +10,7 @@ interface AppContextInterface {
   setProfile: React.Dispatch<React.SetStateAction<User | null>>
   extendedPurchases: ExtendedPurchase[]
   setExtendedPurchases: React.Dispatch<React.SetStateAction<ExtendedPurchase[]>>
+  reset: () => void
 }
 
 const inititalAppContext: AppContextInterface = {
@@ -18,7 +19,8 @@ const inititalAppContext: AppContextInterface = {
   profile: getProfileFromLS(),
   setProfile: () => null,
   extendedPurchases: [],
-  setExtendedPurchases: () => null
+  setExtendedPurchases: () => null,
+  reset: () => null
 }
 
 export const AppContext = createContext<AppContextInterface>(inititalAppContext)
@@ -35,8 +37,21 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [profile, setProfile] = useState<User | null>(inititalAppContext.profile)
   const [extendedPurchases, setExtendedPurchases] = useState<ExtendedPurchase[]>(inititalAppContext.extendedPurchases)
 
+  const reset = () => {
+    setIsAuthenticated(false)
+    setExtendedPurchases([])
+    setProfile(null)
+  }
   const value = useMemo(
-    () => ({ isAuthenticated, setIsAuthenticated, profile, setProfile, extendedPurchases, setExtendedPurchases }),
+    () => ({
+      isAuthenticated,
+      setIsAuthenticated,
+      profile,
+      setProfile,
+      extendedPurchases,
+      setExtendedPurchases,
+      reset
+    }),
     [isAuthenticated, profile, extendedPurchases]
   ) // Wrapped in useMemo
 
