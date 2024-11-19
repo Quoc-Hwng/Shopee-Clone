@@ -1,58 +1,58 @@
 import * as yup from 'yup'
-import type { RegisterOptions, UseFormGetValues } from 'react-hook-form'
+// import type { RegisterOptions, UseFormGetValues } from 'react-hook-form'
 
-type Rules = { [key in 'email' | 'password' | 'confirm_password']?: RegisterOptions }
+// type Rules = { [key in 'email' | 'password' | 'confirm_password']?: RegisterOptions }
 
-export const getRules = (getValues?: UseFormGetValues<any>): Rules => ({
-  email: {
-    required: {
-      value: true,
-      message: 'Email bắt buộc'
-    },
-    pattern: {
-      value: /^\S+@\S+\.\S+$/,
-      message: 'Email không đúng định dạng'
-    },
-    maxLength: {
-      value: 160,
-      message: 'Độ dài từ 5-160 ký tự'
-    },
-    minLength: {
-      value: 5,
-      message: 'Độ dài từ 5-160 ký tự'
-    }
-  },
-  password: {
-    required: {
-      value: true,
-      message: 'Password là bắt buộc'
-    },
-    maxLength: {
-      value: 160,
-      message: 'Độ dài từ 6 - 160 ký tự'
-    },
-    minLength: {
-      value: 6,
-      message: 'Độ dài từ 6 - 160 ký tự'
-    }
-  },
-  confirm_password: {
-    required: {
-      value: true,
-      message: 'Nhập lại Password là bắt buộc'
-    },
-    maxLength: {
-      value: 160,
-      message: 'Độ dài từ 6 - 160 ký tự'
-    },
-    minLength: {
-      value: 6,
-      message: 'Độ dài từ 6 - 160 ký tự'
-    },
-    validate:
-      typeof getValues === 'function' ? (value) => value === getValues('password') || 'Password không khớp' : undefined
-  }
-})
+// export const getRules = (getValues?: UseFormGetValues<any>): Rules => ({
+//   email: {
+//     required: {
+//       value: true,
+//       message: 'Email bắt buộc'
+//     },
+//     pattern: {
+//       value: /^\S+@\S+\.\S+$/,
+//       message: 'Email không đúng định dạng'
+//     },
+//     maxLength: {
+//       value: 160,
+//       message: 'Độ dài từ 5-160 ký tự'
+//     },
+//     minLength: {
+//       value: 5,
+//       message: 'Độ dài từ 5-160 ký tự'
+//     }
+//   },
+//   password: {
+//     required: {
+//       value: true,
+//       message: 'Password là bắt buộc'
+//     },
+//     maxLength: {
+//       value: 160,
+//       message: 'Độ dài từ 6 - 160 ký tự'
+//     },
+//     minLength: {
+//       value: 6,
+//       message: 'Độ dài từ 6 - 160 ký tự'
+//     }
+//   },
+//   confirm_password: {
+//     required: {
+//       value: true,
+//       message: 'Nhập lại Password là bắt buộc'
+//     },
+//     maxLength: {
+//       value: 160,
+//       message: 'Độ dài từ 6 - 160 ký tự'
+//     },
+//     minLength: {
+//       value: 6,
+//       message: 'Độ dài từ 6 - 160 ký tự'
+//     },
+//     validate:
+//       typeof getValues === 'function' ? (value) => value === getValues('password') || 'Password không khớp' : undefined
+//   }
+// })
 
 function testPriceMinMax(this: yup.TestContext<yup.AnyObject>) {
   const { price_min, price_max } = this.parent as { price_min: string; price_max: string }
@@ -91,6 +91,15 @@ export const schema = yup.object({
   name: yup.string().trim().required('Tên sản phẩm là bắt buộc')
 })
 
-// export const loginSchema = schema.omit(['confirm_password'])
-// type LoginSchema = yup.InferType<typeof loginSchema>
+export const userSchema = yup.object({
+  name: yup.string().max(160, 'Độ dài tối đa là 160 ký tự'),
+  phone: yup.string().max(160, 'Độ dài tối đa là 20 ký tự'),
+  address: yup.string().max(160, 'Độ dài tối đa là 160 ký tự'),
+  avatar: yup.string().max(1000, 'Độ dài tối đa là 1000 ký tự'),
+  date_of_birth: yup.date().max(new Date(), 'Ngày không hợp lệ, vui lòng chỉnh ngày chính xác'),
+  password: schema.fields['password'],
+  new_password: schema.fields['password'],
+  confirm_password: schema.fields['confirm_password']
+})
+export type UserSchema = yup.InferType<typeof userSchema>
 export type Schema = yup.InferType<typeof schema>
