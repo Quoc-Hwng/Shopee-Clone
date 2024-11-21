@@ -59,7 +59,7 @@ function testPriceMinMax(this: yup.TestContext<yup.AnyObject>) {
   if (price_min !== '' && price_max !== '') {
     return Number(price_max) >= Number(price_min)
   }
-  return price_min !== '' || price_max !== ''
+  return true
 }
 
 export const schema = yup.object({

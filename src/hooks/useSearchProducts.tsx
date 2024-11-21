@@ -20,8 +20,8 @@ export default function useSearchProducts() {
   const navigate = useNavigate()
   const onSubmitSearch = handleSubmit((data) => {
     const config = queryConfig.order
-      ? omit({ ...queryConfig, name: data.name }, ['order', 'sort_by'])
-      : { ...queryConfig, name: data.name }
+      ? omit({ ...queryConfig, name: data.name, page: '1' }, ['order', 'sort_by'])
+      : { ...queryConfig, name: data.name, page: '1' }
     navigate({
       pathname: path.home,
       search: createSearchParams(config).toString()

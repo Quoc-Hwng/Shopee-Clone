@@ -7,6 +7,7 @@ import authApi from '../../apis/auth.api'
 import { useMutation } from '@tanstack/react-query'
 import { useQueryClient } from '@tanstack/react-query'
 import { PURCHASES_STATUS } from '../../constants/purchase'
+import userImage from '../../assets/images/user.svg'
 
 export default function NavHeader() {
   const queryClient = useQueryClient()
@@ -86,13 +87,9 @@ export default function NavHeader() {
           }
         >
           <div className='w-6 h-6 mr-2 flex-shrink-0'>
-            <img
-              src='https://scontent.fsgn2-5.fna.fbcdn.net/v/t39.30808-1/448316774_3849390388626953_1805964275726886412_n.jpg?stp=cp0_dst-jpg_s40x40&_nc_cat=104&ccb=1-7&_nc_sid=0ecb9b&_nc_eui2=AeEgxLCWo07ZSRgexLzBvwYajicYnAq47UeOJxicCrjtR-gtMuMcDQc_8V7ZP85oWq7fxLJ0woXGkWqyGDOnnptZ&_nc_ohc=eArQE4uy5AAQ7kNvgFCZZIq&_nc_zt=24&_nc_ht=scontent.fsgn2-5.fna&_nc_gid=A4dbB7jFmiHWNuFUyqbZYvx&oh=00_AYC8Dnau6_ywP7nTOB-qxFVts-mhaiMRy6l_VvumYqvyzA&oe=672664DD'
-              alt='avatar'
-              className='w-full h-full object-cover rounded-full'
-            />
+            <img src={profile?.avatar || userImage} alt='avatar' className='w-full h-full object-cover rounded-full' />
           </div>
-          <div className=''>{profile?.name}</div>
+          <div className=''>{profile?.email}</div>
         </Popover>
       )}
       {!isAuthenticated && (

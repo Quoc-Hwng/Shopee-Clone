@@ -17,17 +17,19 @@ const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(function Inpu
   },
   ref
 ) {
-  const [localValue, setLocalValue] = useState<string>(value as string)
+  // const [localValue, setLocalValue] = useState<string>(value as string)
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
     if (/^\d+$/.test(value) || value === '') {
       onChange?.(event)
-      setLocalValue(value)
+      // setLocalValue(value)
+    } else {
+      event.preventDefault()
     }
   }
   return (
     <div className={className}>
-      <input className={classNameInput} onChange={handleChange} value={value || localValue} {...rest} ref={ref} />
+      <input className={classNameInput} onChange={handleChange} value={value} {...rest} ref={ref} />
       <div className={classNameError}>{errorMessage}</div>
     </div>
   )

@@ -6,19 +6,23 @@ import { userSchema, UserSchema } from '../../../../utils/rules'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import InputNumber from '../../../../components/InputNumber'
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import DateSelect from '../../components/DateSelect'
+import { toast } from 'react-toastify'
+import { AppContext } from '../../../../contexts/app.context'
+import { setProfileToLS } from '../../../../utils/auth'
 
 type FormData = Pick<UserSchema, 'name' | 'address' | 'phone' | 'date_of_birth' | 'avatar'>
 const profileSchema = userSchema.pick(['name', 'address', 'phone', 'date_of_birth', 'avatar'])
+
 export default function Profile() {
+  const { setProfile } = useContext(AppContext)
   const {
     register,
     control,
     formState: { errors },
     handleSubmit,
-    setValue,
-    setError
+    setValue
   } = useForm<FormData>({
     defaultValues: {
       name: '',
@@ -29,12 +33,14 @@ export default function Profile() {
     },
     resolver: yupResolver(profileSchema)
   })
-  const { data: profileData } = useQuery({
+  const { data: profileData, refetch } = useQuery({
     queryKey: ['profile'],
     queryFn: userApi.getProfile
   })
   const profile = profileData?.data.data
-  const updateProfileMutation = useMutation(userApi.updateProfile)
+  const updateProfileMutation = useMutation({
+    mutationFn: userApi.updateProfile
+  })
 
   useEffect(() => {
     if (profile) {
@@ -47,8 +53,18 @@ export default function Profile() {
   }, [profile, setValue])
 
   const onSubmit = handleSubmit(async (data) => {
-    // await updateProfileMutation.mutateAsync
-    console.log(data)
+    const res = await updateProfileMutation.mutateAsync({
+      ...data,
+      date_of_birth: data.date_of_birth?.toISOString()
+    })
+    if (res.data.data) {
+      setProfile(res.data.data)
+      setProfileToLS(res.data.data)
+    } else {
+      setProfile(null) // Set to null if data is undefined
+    }
+    refetch()
+    toast.success(res.data.message)
   })
 
   return (

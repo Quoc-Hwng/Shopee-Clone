@@ -8,7 +8,7 @@ import InputNumber from '../../../../components/InputNumber'
 import { useForm, Controller } from 'react-hook-form'
 import { Schema, schema } from '../../../../utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { NoUndefinedField } from '../../../../types/utils.type'
+// import { NoUndefinedField } from '../../../../types/utils.type'
 import RatingStars from '../RatingStars'
 import { omit } from 'lodash'
 
@@ -16,7 +16,7 @@ interface Props {
   readonly queryConfig: QueryConfig
   readonly categories: Category[]
 }
-type FormData = NoUndefinedField<Pick<Schema, 'price_max' | 'price_min'>>
+type FormData = Pick<Schema, 'price_max' | 'price_min'>
 
 const priceSchema = schema.pick(['price_min', 'price_max'])
 
@@ -25,7 +25,8 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
   const {
     control,
     handleSubmit,
-    setValue,
+    // setValue,
+    reset,
     formState: { errors },
     trigger
   } = useForm<FormData>({
@@ -43,8 +44,9 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
       pathname: path.home,
       search: createSearchParams({
         ...queryConfig,
-        price_max: data.price_max,
-        price_min: data.price_min
+        price_max: data.price_max || '',
+        price_min: data.price_min || '',
+        page: '1'
       }).toString()
     })
   })
@@ -52,10 +54,13 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
   const handleRemoveAll = () => {
     navigate({
       pathname: path.home,
-      search: createSearchParams(omit(queryConfig, ['price_max', 'price_min', 'rating_filter', 'category'])).toString()
+      search: createSearchParams(
+        omit({ ...queryConfig, page: '1' }, ['price_max', 'price_min', 'rating_filter', 'category'])
+      ).toString()
     })
-    setValue('price_max', '')
-    setValue('price_min', '')
+    // setValue(, '')
+    // setValue('price_min', '')
+    reset()
   }
 
   return (
@@ -76,7 +81,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
         </svg>
         Tất cả danh mục
       </Link>
-      <div className='br-gray-300 h-[1px] my-4'>
+      <div className='br-gray-300 my-4'>
         <ul>
           {categories.map((categoryItem) => {
             const isActive = category === categoryItem._id
@@ -87,7 +92,8 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
                     pathname: path.home,
                     search: createSearchParams({
                       ...queryConfig,
-                      category: categoryItem._id
+                      category: categoryItem._id,
+                      page: '1'
                     }).toString()
                   }}
                   className={classNames('relative px-2', {

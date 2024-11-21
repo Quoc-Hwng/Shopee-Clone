@@ -1,7 +1,7 @@
 import { createSearchParams, Link } from 'react-router-dom'
 import classNames from 'classnames'
-import { QueryConfig } from '../../pages/ProductList/ProductList'
 import path from '../../constants/path'
+import { QueryConfig } from '../../hooks/useQueryConfig'
 
 interface Props {
   queryConfig: QueryConfig
@@ -81,7 +81,7 @@ export default function Pagination({ queryConfig, pageSize }: Props) {
             pathname: path.home,
             search: createSearchParams({
               ...queryConfig,
-              page: (page - 1).toString()
+              page: Math.max(page - 1, 0).toString()
             }).toString()
           }}
         >
@@ -98,7 +98,7 @@ export default function Pagination({ queryConfig, pageSize }: Props) {
             pathname: path.home,
             search: createSearchParams({
               ...queryConfig,
-              page: (page + 1).toString()
+              page: Math.min(page + 1, pageSize).toString()
             }).toString()
           }}
         >
