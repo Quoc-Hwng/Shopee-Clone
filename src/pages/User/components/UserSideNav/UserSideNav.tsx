@@ -1,20 +1,24 @@
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import path from '../../../../constants/path'
 import { useContext } from 'react'
 import { AppContext } from '../../../../contexts/app.context'
 import { getAvatarUrl } from '../../../../utils/utils'
+import classNames from 'classnames'
 
 export default function UserSideNav() {
   const { profile } = useContext(AppContext)
   return (
     <>
       <div className='flex items-center border-b border-b-gray-200 py-4'>
-        <Link to={path.profile} className='size-12 flex-shrink-0 overflow-hidden rounded-full bprder border-black/10'>
+        <NavLink
+          to={path.profile}
+          className='size-12 flex-shrink-0 overflow-hidden rounded-full border border-black/10'
+        >
           <img src={getAvatarUrl(profile?.avatar)} alt={profile?.email} className='size-full object-cover' />
-        </Link>
+        </NavLink>
         <div className='flex-grow pl-4'>
           <div className='mb-1 truncate font-semibold text-gray-600'>SanSan</div>
-          <Link to={path.profile} className='flex items-center capitalize text-gray-500'>
+          <NavLink to={path.profile} className='flex items-center capitalize text-gray-500'>
             <svg
               width={12}
               height={12}
@@ -29,28 +33,52 @@ export default function UserSideNav() {
               />
             </svg>
             Sửa hồ sơ
-          </Link>
+          </NavLink>
         </div>
       </div>
       <div className='mt-7 flex flex-col gap-4'>
-        <Link to={path.profile} className='flex items-center capitalize text-orange transition-colors'>
+        <NavLink
+          to={path.profile}
+          className={({ isActive }) =>
+            classNames('flex items-center capitalize transition-colors', {
+              'text-orange': isActive,
+              'text-gray-600': !isActive
+            })
+          }
+        >
           <div className='mr-3 h-[22px] w-[22px]'>
             <img src='https://cf.shopee.vn/file/ba61750a46794d8847c3f463c5e71cc4' alt='' className='size-full' />
           </div>
           Tài khoản của tôi
-        </Link>
-        <Link to={path.profile} className='flex items-center capitalize text-orange transition-colors'>
+        </NavLink>
+        <NavLink
+          to={path.changePassword}
+          className={({ isActive }) =>
+            classNames('flex items-center capitalize transition-colors', {
+              'text-orange': isActive,
+              'text-gray-600': !isActive
+            })
+          }
+        >
           <div className='mr-3 h-[22px] w-[22px]'>
             <img src='https://cf.shopee.vn/file/ba61750a46794d8847c3f463c5e71cc4' alt='' className='size-full' />
           </div>
           Đổi mật khẩu
-        </Link>
-        <Link to={path.profile} className='flex items-center capitalize text-orange transition-colors'>
+        </NavLink>
+        <NavLink
+          to={path.historyPurchase}
+          className={({ isActive }) =>
+            classNames('flex items-center capitalize transition-colors', {
+              'text-orange': isActive,
+              'text-gray-600': !isActive
+            })
+          }
+        >
           <div className='mr-3 h-[22px] w-[22px]'>
             <img src='https://cf.shopee.vn/file/f0049e9df4e536bc3e7f140d071e9078' alt='' className='size-full' />
           </div>
           Đơn mua
-        </Link>
+        </NavLink>
       </div>
     </>
   )
