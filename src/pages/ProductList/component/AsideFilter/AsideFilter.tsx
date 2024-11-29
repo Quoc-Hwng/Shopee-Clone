@@ -52,15 +52,13 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
   })
 
   const handleRemoveAll = () => {
+    reset()
     navigate({
       pathname: path.home,
       search: createSearchParams(
         omit({ ...queryConfig, page: '1' }, ['price_max', 'price_min', 'rating_filter', 'category'])
       ).toString()
     })
-    // setValue(, '')
-    // setValue('price_min', '')
-    reset()
   }
 
   return (
