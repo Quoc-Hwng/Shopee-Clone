@@ -14,6 +14,7 @@ import HistoryPurchase from './pages/User/pages/HistoryPurchase'
 import Profile from './pages/User/pages/Profile'
 import { RejectedRoute } from './route/RejectedRoute'
 import { ProtectedRoute } from './route/ProtectedRoute'
+import NotFound from './pages/NotFound'
 
 export default function useRouteElements() {
   const routeElements = useRoutes([
@@ -90,6 +91,14 @@ export default function useRouteElements() {
       element: (
         <MainLayout>
           <ProductList />
+        </MainLayout>
+      )
+    },
+    {
+      path: '*',
+      element: (
+        <MainLayout>
+          <NotFound />
         </MainLayout>
       )
     }
