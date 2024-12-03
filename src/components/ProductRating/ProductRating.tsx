@@ -2,11 +2,11 @@ export default function ProductRating({
   rating,
   activeClassname = 'h-3 w-3 fill-yellow-300 text-yellow-300',
   nonActiveClassname = 'w-3 h-3 fill-gray-300 text-gray-300'
-}: Readonly<{
+}: {
   rating: number
-  activeClassname: string
-  nonActiveClassname: string
-}>) {
+  activeClassname?: string
+  nonActiveClassname?: string
+}) {
   const handleWidth = (order: number) => {
     if (order <= rating) {
       return '100%'

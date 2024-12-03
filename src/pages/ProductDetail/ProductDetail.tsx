@@ -12,13 +12,15 @@ import purchaseApi from '../../apis/purchase.api'
 import { PURCHASES_STATUS } from '../../constants/purchase'
 import { toast } from 'react-toastify'
 import path from '../../constants/path'
+import axios from 'axios'
+import HttpStatusCode from '../../constants/httpStatusCode.enum'
 
 export default function ProductDetail() {
   const [buyCount, setBuyCount] = useState(1)
   const { nameId } = useParams()
   const id = getIdFromNameId(nameId as string)
 
-  const { data: productDetailData } = useQuery({
+  const { data: productDetailData, error } = useQuery({
     queryKey: ['product', id],
     queryFn: () => productApi.getProductDetail(id as string)
   })
@@ -114,6 +116,14 @@ export default function ProductDetail() {
     })
   }
 
+  if (error) {
+    console.log(error)
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === HttpStatusCode.NotFound || error.response?.status === HttpStatusCode.BadRequest) {
+        throw Error(HttpStatusCode.NotFound.toString())
+      }
+    }
+  }
   if (!product) return null
   return (
     <div className='bg-gray-200 py-6'>
