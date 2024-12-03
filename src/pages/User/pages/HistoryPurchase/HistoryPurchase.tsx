@@ -7,6 +7,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import purchaseApi from '../../../../apis/purchase.api'
 import { PurchaseListStatus } from '../../../../types/purchase.type'
 import { formatCurrency, generateNameId } from '../../../../utils/utils'
+import { Helmet } from 'react-helmet-async'
 
 const purchaseTabs = [
   { status: PURCHASES_STATUS.all, name: 'Tất cả' },
@@ -63,6 +64,10 @@ export default function HistoryPurchase() {
   return (
     <div>
       <div className='overflow-x-auto'>
+        <Helmet>
+          <title>Đơn hàng | Shopee Clone</title>
+          <meta name='description' content='Đơn hàng' />
+        </Helmet>
         <div className='min-w-[700px]'>
           <div className='sticky top-0 flex rounded-t-sm shadow-sm'>{purchaseTabsLink}</div>
           <div>

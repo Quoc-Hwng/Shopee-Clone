@@ -31,9 +31,9 @@ export default class ErrorBoundary extends Component<Props, State> {
       // You can render any custom fallback UI
       return (
         <main className='flex h-screen w-full flex-col items-center justify-center'>
-          <h1 className='text-9xl font-extrabold tracking-widest text-gray-900'>{this.state.message}</h1>
+          <h1 className='text-xl font-extrabold tracking-widest text-gray-900'>{this.state.message}</h1>
           <div className='absolute rotate-12 rounded bg-orange px-2 text-sm text-white'>Error!</div>
-          <button className='mt-5'>
+          <button className='mt-20'>
             <a
               href='/'
               className='active:text-orange-500 group relative inline-block text-sm font-medium text-white focus:outline-none focus:ring'
