@@ -23,7 +23,7 @@ type FormData = Pick<Schema, 'price_max' | 'price_min'>
 const priceSchema = schema.pick(['price_min', 'price_max'])
 
 export default function AsideFilter({ queryConfig, categories }: Props) {
-  const { t } = useTranslation()
+  const { t } = useTranslation('home')
   const { category } = queryConfig
   const {
     control,
@@ -80,7 +80,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
             </g>
           </g>
         </svg>
-        {t('all categories')}
+        {t('aside filter.all categories')}
       </Link>
       <div className='br-gray-300 my-4'>
         <ul>
@@ -130,7 +130,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
               ></polyline>
             </g>
           </svg>
-          Bộ lọc tìm kiếm
+          {t('aside filter.filter search')}
         </Link>
         <div className='bg-gray-300 h-[1px] my-4' />
         <div className='my-5'>

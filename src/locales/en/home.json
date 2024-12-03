@@ -1,3 +1,6 @@
 {
-  "available": "Sản phẩm có sẵn"
+  "aside filter": {
+    "all categories": "All categories",
+    "filter search": "Filter"
+  }
 }
