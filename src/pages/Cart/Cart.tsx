@@ -11,7 +11,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useContext, useEffect, useMemo } from 'react'
 import { produce } from 'immer'
-import { keyBy } from 'lodash'
+import keyBy from 'lodash/keyBy'
 import { toast } from 'react-toastify'
 import { AppContext } from '../../contexts/app.context'
 
